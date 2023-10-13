@@ -1,66 +1,76 @@
+require('dotenv').config()
+
+require('./mongo')
 const express = require('express')
 const cors = require('cors')
 const logger = require('./loggerMiddleware')
+const Note = require('./models/Note')
+const notFound = require('./middleware/notFound')
+const handleError = require('./middleware/handleError')
+
+// const connectionStr = require('./mongo')
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
-
+app.use(express.static('public'))
 app.use(logger)
-
-let notes = []
-
-// let notes = [
-//   {
-//     id: 1,
-//     content: 'Me tengo que suscribir a @xenolito en twitch',
-//     date: '2019-05-30T17:30:31.098Z',
-//     important: false
-//   },
-//   {
-//     id: 2,
-//     content: 'Tengo que estudir más!',
-//     date: '2019-05-30T18:39:34.091Z',
-//     important: true
-//   },
-//   {
-//     id: 3,
-//     content: 'Tengo que monetizar mis conocimientos',
-//     date: '2019-05-30T19:20:14.298Z',
-//     important: true
-//   }
-// ]
-
-// const app = http.createServer((request, response) => {
-//     response.writeHead(200, { 'Content-Type': 'application/json' })
-//     response.end(JSON.stringify(notes))
-// })
 
 app.get('/', (request, response) => {
   response.send('<h1>Hola Mundo @@</h1>')
 })
 
 app.get('/api/notes', (request, response) => {
-  console.log(notes)
-  response.json(notes)
+  Note.find({})
+    .then((notes) => {
+      console.log(notes)
+      response.json(notes)
+    })
 })
 
-app.get('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
+app.get('/api/notes/:id', (request, response, next) => {
+  const { id } = request.params
   console.log({ id })
-  const note = notes.find(note => note.id === id)
-  if (note) {
-    response.send(note)
-  } else {
-    response.status(404).json({ error: 'not found' }).end()
-  }
+  // const note = notes.find(note => note.id === id)
+  Note.findById(id).then((note) => {
+    if (note) {
+      response.send(note)
+    } else {
+      response.status(404).json({ error: 'not found' }).end()
+    }
+  })
+    .catch((error) => {
+      next(error)
+    })
 })
 
-app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  notes = notes.filter(note => note.id !== id)
-  response.status(204).end()
+app.delete('/api/notes/:id', (request, response, next) => {
+  const { id } = request.params
+  // notes = notes.filter(note => note.id !== id)
+  Note.findByIdAndDelete(id)
+    .then((resp) => {
+      response.status(204).end()
+    })
+    .catch((error) => next(error))
+})
+
+app.put('/api/notes/:id', (request, response, next) => {
+  const { id } = request.params
+
+  const note = request.body
+
+  const newNoteInfo = {
+    content: note.content,
+    important: note.important
+
+  }
+
+  Note.findByIdAndUpdate(id, newNoteInfo, { new: true })
+    .then((resp) => {
+      response.status(200).json(resp)
+    })
+  // notes = notes.filter(note => note.id !== id)
 })
 
 app.post('/api/notes', (request, response) => {
@@ -72,30 +82,32 @@ app.post('/api/notes', (request, response) => {
     })
   }
 
-  const ids = notes.map(note => note.id)
-  const maxId = notes.length ? Math.max(...ids) : -1
+  // const ids = notes.map(note => note.id)
+  // const maxId = notes.length ? Math.max(...ids) : -1
 
-  const newNote = {
-    id: maxId + 1,
+  const newNote = new Note({
     content: note.content,
     important: typeof note.important !== 'undefined' ? note.important : false,
     date: new Date().toISOString(),
     userId: note.userId
-  }
 
-  // notes = notes.concat(newNote)
-  notes = [...notes, newNote]
-
-  response.status(201).json(newNote)
-})
-
-app.use((request, response) => {
-  response.status(404).json({
-    error: 'Not found'
   })
+
+  newNote.save()
+    .then((savedNote) => {
+      response.status(201).json(savedNote)
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 })
 
-const PORT = process.env.PORT || 4001
+app.use(notFound)
+
+app.use(handleError)
+
+// const PORT = process.env.PORT || 4001
+const PORT = process.env.PORT
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)

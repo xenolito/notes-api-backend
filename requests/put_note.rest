@@ -1,0 +1,7 @@
+PUT http://localhost:4001/api/notes/6527cd8060e675b8e6592903
+Content-Type: application/json
+
+{
+    "content": "Esto es una nota modificada otra vez y ooootra vez",
+    "important": false
+}
