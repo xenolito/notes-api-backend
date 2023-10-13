@@ -14,6 +14,7 @@ noteSchema.set('toJSON', {
   }
 })
 
-const Note = new model('Note', noteSchema)
+// 'model' in lowercase comes from mongoose library --> disabling eslint rules for this line
+const Note = new model('Note', noteSchema) // eslint-disable-line
 
 module.exports = Note

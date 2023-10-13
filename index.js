@@ -18,7 +18,7 @@ app.use(express.static('public'))
 app.use(logger)
 
 app.get('/', (request, response) => {
-  response.send('<h1>Hola Mundo @@</h1>')
+  response.send('<h1>Bienvenido a la API de PICTAU©</h1><p>Browse all notes <a href="/api/notes">here</a><p>')
 })
 
 app.get('/api/notes', (request, response) => {
