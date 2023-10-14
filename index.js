@@ -3,6 +3,7 @@ require('dotenv').config()
 require('./mongo')
 const express = require('express')
 const cors = require('cors')
+
 const logger = require('./loggerMiddleware')
 const Note = require('./models/Note')
 const notFound = require('./middleware/notFound')
@@ -19,6 +20,7 @@ app.use(logger)
 
 app.get('/', (request, response) => {
   response.send('<h1>Bienvenido a la API de PICTAU©</h1><p>Browse all notes <a href="/api/notes">here</a><p>')
+  // response.sendFile('index2.html')
 })
 
 app.get('/api/notes', (request, response) => {
