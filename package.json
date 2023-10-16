@@ -4,16 +4,19 @@
   "description": "custom-api",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "start": "NODE_ENV=production node index.js",
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test jest --verbose --silent tests/notes.test.js",
+    "test:watch": "npm run test -- --watch"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "3.0.1",
-    "standard": "17.1.0"
+    "standard": "17.1.0",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "cors": "2.8.5",
@@ -22,6 +25,12 @@
     "mongoose": "7.6.1"
   },
   "eslintConfig": {
-    "extends": "./node_modules/standard/eslintrc.json"
+    "extends": "./node_modules/standard/eslintrc.json",
+    "env": {
+      "jest": true
+    }
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

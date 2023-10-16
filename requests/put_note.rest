@@ -1,8 +1,8 @@
-# PUT http://localhost:4001/api/notes/652900658da9c4d5c5e3f96c
+# PUT http://localhost:4001/api/notes/652accd7f282464ed8e1928e
 PUT https://evening-castle-33015-33fd40ba3c3e.herokuapp.com/api/notes/6529202071cef67cdde33338
 Content-Type: application/json
 
 {
-    # "content": "Esto es una nota modificada otra vez y ooootra vez",
+    "content": "Esto es una nota modificada otra vez y ooootra vez",
     "important": true
 }
