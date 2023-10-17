@@ -1,7 +1,11 @@
+const uniqueValidator = require('mongoose-unique-validator')
 const { Schema, model } = require('mongoose')
 
 const userSchema = new Schema({
-  username: String,
+  username: {
+    type: String,
+    unique: true
+  },
   name: String,
   passwordHash: String,
   notes: [{
@@ -18,6 +22,8 @@ userSchema.set('toJSON', {
     delete returnedObject.passwordHash // Nos aseguramos que nunca devuelva el pass (por si acaso)
   }
 })
+
+userSchema.plugin(uniqueValidator)
 
 const User = new model('User', userSchema) // eslint-disable-line
 

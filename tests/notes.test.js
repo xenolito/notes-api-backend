@@ -1,5 +1,6 @@
 const Note = require('../models/Note')
-const { initialNotes, api, mongoose, server } = require('./helpers')
+const User = require('../models/User')
+const { initialNotes, initialUsers, api, mongoose, server, getUsers } = require('./helpers')
 
 beforeEach(async () => {
   await Note.deleteMany({})
@@ -8,6 +9,10 @@ beforeEach(async () => {
 
   const note2 = new Note(initialNotes[1])
   await note2.save()
+
+  await User.deleteMany({})
+  const user1 = new User(initialUsers[0])
+  await user1.save()
 })
 
 test('notes are returned as json', async () => {
@@ -28,9 +33,12 @@ test('the first note is about orey', async () => {
 
 test('a valid note can be added', async () => {
   // creamos nota
+  const users = await getUsers()
+
   const newNote = {
     content: 'Proximamente en @xenolito world',
-    important: true
+    important: true,
+    userId: users[0].id
   }
   // enviamos nota por post a la bbdd (utilizando el método .send() de supertest) y validamos que la respuesta es la que se espera
   await api.post('/api/notes')

@@ -1,8 +1,13 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/Note')
+const User = require('../models/User')
 
 notesRouter.get('/', async (request, response) => {
-  const notes = await Note.find({})
+  const notes = await Note.find({}).populate('user', {
+    username: 1,
+    name: 1,
+    _id: 0
+  })
 
   console.log(notes)
   response.json(notes)
@@ -56,31 +61,49 @@ notesRouter.put('/:id', async (request, response, next) => {
   // notes = notes.filter(note => note.id !== id)
 })
 
-notesRouter.post('/', async (request, response) => {
-  const note = request.body
+notesRouter.post('/', async (request, response, next) => {
+  const {
+    content,
+    important = false,
+    userId
+  } = request.body
 
-  if (!note || !note.content) {
+  if (!content) {
     return response.status(400).json({
       error: 'note.content is missing'
     })
   }
 
-  // const ids = notes.map(note => note.id)
-  // const maxId = notes.length ? Math.max(...ids) : -1
+  if (!userId) {
+    return response.status(400).json({
+      error: 'note.userId is missing'
+    })
+  }
+
+  const user = await User.findById(userId)
+
+  if (!user) {
+    return response.status(401).json({
+      error: 'user not matching registered one'
+    })
+  }
 
   const newNote = new Note({
-    content: note.content,
-    important: typeof note.important !== 'undefined' ? note.important : false,
+    content,
+    important,
     date: new Date().toISOString(),
-    userId: note.userId
+    user: user._id
 
   })
 
   try {
     const savedNote = await newNote.save()
+
+    user.notes = user.notes.concat(savedNote._id)
     response.status(201).json(savedNote)
+    await user.save()
   } catch (error) {
-    console.log(error)
+    next(error)
   }
 })
 
