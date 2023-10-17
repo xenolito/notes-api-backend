@@ -81,6 +81,12 @@ notesRouter.post('/', async (request, response, next) => {
     })
   }
 
+  if (!typeof userId === 'string' || !userId.toString().match(/^[0-9a-fA-F]{24}$/)) {
+    return response.status(400).json({
+      error: 'note.userId is not a valid id'
+    })
+  }
+
   const user = await User.findById(userId)
 
   if (!user) {

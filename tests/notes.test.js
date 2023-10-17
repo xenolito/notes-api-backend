@@ -68,6 +68,19 @@ test('crete a note with missing userId', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
+test('crete a note with wrong userId', async () => {
+  const newNote = {
+    content: 'Proximamente en @xenolito world',
+    important: 1,
+    userId: 1
+  }
+  // enviamos nota por post a la bbdd (utilizando el método .send() de supertest) y validamos que la respuesta es la que se espera
+  await api.post('/api/notes')
+    .send(newNote)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
 afterAll(() => {
   mongoose.connection.close()
   server.close()
