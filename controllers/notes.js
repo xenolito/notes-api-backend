@@ -63,9 +63,9 @@ notesRouter.put('/:id', async (request, response, next) => {
 
 notesRouter.post('/', async (request, response, next) => {
   const {
+    userId,
     content,
-    important = false,
-    userId
+    important = false
   } = request.body
 
   if (!content) {
@@ -75,6 +75,7 @@ notesRouter.post('/', async (request, response, next) => {
   }
 
   if (!userId) {
+    next({ error: 'note.userId is missing' })
     return response.status(400).json({
       error: 'note.userId is missing'
     })

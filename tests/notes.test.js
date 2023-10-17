@@ -52,6 +52,22 @@ test('a valid note can be added', async () => {
   expect(contents).toContain(newNote.content)
 })
 
+test('crete a note with missing userId', async () => {
+  // creamos nota
+  // const users = await getUsers()
+
+  const newNote = {
+    content: 'Proximamente en @xenolito world',
+    important: true
+    // userId: users[0].id
+  }
+  // enviamos nota por post a la bbdd (utilizando el método .send() de supertest) y validamos que la respuesta es la que se espera
+  await api.post('/api/notes')
+    .send(newNote)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
 afterAll(() => {
   mongoose.connection.close()
   server.close()

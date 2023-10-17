@@ -13,8 +13,17 @@ const notesRouter = require('./controllers/notes')
 
 const app = express()
 
+// config express.json() to verify that request.body is a well formed json!!
+const verifyJson = {
+  verify: (req, res, buf, encoding) => {
+    try { JSON.parse(buf) } catch (e) {
+      res.status(400).json({ error: 'request.body is a malformed json' })
+    }
+  }
+}
+
 app.use(cors())
-app.use(express.json())
+app.use(express.json(verifyJson))
 app.use(express.static('public'))
 app.use(logger)
 
