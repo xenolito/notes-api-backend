@@ -9,6 +9,7 @@ const notFound = require('./middleware/notFound')
 const handleError = require('./middleware/handleError')
 const usersRouter = require('./controllers/users')
 const notesRouter = require('./controllers/notes')
+const loginRouter = require('./controllers/login')
 // const connectionStr = require('./mongo')
 
 const app = express()
@@ -35,6 +36,8 @@ app.use(logger)
 app.use('/api/notes', notesRouter)
 
 app.use('/api/users', usersRouter)
+
+app.use('/api/login', loginRouter)
 
 app.use(notFound)
 

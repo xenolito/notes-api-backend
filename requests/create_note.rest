@@ -1,9 +1,9 @@
-# POST https://evening-castle-33015-33fd40ba3c3e.herokuapp.com/api/notes
-POST http://localhost:4001/api/notes
+POST https://evening-castle-33015-33fd40ba3c3e.herokuapp.com/api/notes
+# POST http://localhost:4001/api/notes
 Content-Type: application/json
 
 {
-    "content": "Esto es una nueva nota",
+    "content": "Esto es una nueva nota de ARKHAM",
     "important": true,
     "userId": "652e5d0f46b50130df41dc3d"
 }
@@ -12,13 +12,16 @@ Content-Type: application/json
 
 #this is a missing keys body
 POST http://localhost:4001/api/notes
+# POST https://evening-castle-33015-33fd40ba3c3e.herokuapp.com/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MmU1ZDBmNDZiNTAxMzBkZjQxZGMzZCIsInVzZXJuYW1lIjoicGlua3BhbnRoZXIiLCJpYXQiOjE2OTc2Mjg4MjgsImV4cCI6MTY5ODIzMzYyOH0.jW8IaxkrVqLlgxB789HMI8D3tjhtTVqBEQK13BBSOow
 
 {
-    "content": "jkljkljkljkljkljkljkl",
-    "userId": 1,
+    "content": "Más allá de Villalba",
     "important": 1
 }
+
+
 
 ###
 #this is a malformed json for express (the trailing comma ,)

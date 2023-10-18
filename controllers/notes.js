@@ -1,4 +1,5 @@
 const notesRouter = require('express').Router()
+const userExtractor = require('../middleware/userExtractor')
 const Note = require('../models/Note')
 const User = require('../models/User')
 
@@ -29,7 +30,7 @@ notesRouter.get('/:id', async (request, response, next) => {
   }
 })
 
-notesRouter.delete('/:id', async (request, response, next) => {
+notesRouter.delete('/:id', userExtractor, async (request, response, next) => {
   const { id } = request.params
   // notes = notes.filter(note => note.id !== id)
   try {
@@ -41,7 +42,7 @@ notesRouter.delete('/:id', async (request, response, next) => {
   }
 })
 
-notesRouter.put('/:id', async (request, response, next) => {
+notesRouter.put('/:id', userExtractor, async (request, response, next) => {
   const { id } = request.params
 
   const note = request.body
@@ -61,37 +62,41 @@ notesRouter.put('/:id', async (request, response, next) => {
   // notes = notes.filter(note => note.id !== id)
 })
 
-notesRouter.post('/', async (request, response, next) => {
+// This middleware notesRouter, has a second middleware 'userExtractor' before doing his work... so we already have extraced the user AND saved to the request as another key (request.userId)
+notesRouter.post('/', userExtractor, async (request, response, next) => {
   const {
-    userId,
     content,
     important = false
   } = request.body
 
-  if (!content) {
-    return response.status(400).json({
-      error: 'note.content is missing'
-    })
-  }
+  // if (!userId) {
+  //   next({ error: 'note.userId is missing' })
+  //   return response.status(400).json({
+  //     error: 'note.userId is missing'
+  //   })
+  // }
 
-  if (!userId) {
-    next({ error: 'note.userId is missing' })
-    return response.status(400).json({
-      error: 'note.userId is missing'
-    })
-  }
+  // // check if id is a string and with a valid objectID type of string "match(/^[0-9a-fA-F]{24}$/)"
 
-  if (!typeof userId === 'string' || !userId.toString().match(/^[0-9a-fA-F]{24}$/)) {
-    return response.status(400).json({
-      error: 'note.userId is not a valid id'
-    })
-  }
+  // if (!typeof userId === 'string' || !userId.toString().match(/^[0-9a-fA-F]{24}$/)) {
+  //   return response.status(400).json({
+  //     error: 'note.userId is not a valid id'
+  //   })
+  // }
+
+  const { userId } = request
 
   const user = await User.findById(userId)
 
   if (!user) {
     return response.status(401).json({
       error: 'user not matching registered one'
+    })
+  }
+
+  if (!content) {
+    return response.status(400).json({
+      error: 'note.content is missing'
     })
   }
 
