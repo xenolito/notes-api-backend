@@ -1,6 +1,6 @@
 const mailRouter = require('express').Router()
 const nodemailer = require('nodemailer')
-// const corsMiddleware = require('../cors')
+const corsMiddleware = require('../cors')
 
 // console.log('allowed origins', corsOriginAllowed)
 
@@ -14,6 +14,18 @@ const nodemailer = require('nodemailer')
 //   }
 // }
 
+const corsOriginAllowed = process.env.CORS_ALLOWED.split(', ')
+
+const validCORS = function (origin) {
+  if (corsOriginAllowed.indexOf(origin) !== -1) {
+    return true
+  } else {
+    return false
+  }
+}
+
+mailRouter.use(corsMiddleware)
+
 mailRouter.get('/', async (request, response, next) => {
   response.json({
     sendMail: 'API to send our emails'
@@ -21,11 +33,17 @@ mailRouter.get('/', async (request, response, next) => {
 })
 
 mailRouter.post('/', async (request, response, next) => {
-  const { body } = request
+  const { body, headers } = request
   const { to, subject, content } = body
+
+  console.log('headers', request.headers)
 
   if (!to || !subject || !content) {
     return response.status(400).json({ error: 'missing some required fields' })
+  }
+
+  if (!validCORS(headers.origin)) {
+    return response.status(403).json({ error: 'forbidden by CORS' })
   }
 
   if (!process.env.MAIL_USR || !process.env.MAIL_PASS) {
