@@ -14,10 +14,10 @@ Content-Type: application/json
 POST http://localhost:4001/api/notes
 # POST https://evening-castle-33015-33fd40ba3c3e.herokuapp.com/api/notes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MmU1ZDBmNDZiNTAxMzBkZjQxZGMzZCIsInVzZXJuYW1lIjoicGlua3BhbnRoZXIiLCJpYXQiOjE2OTc2Mjg4MjgsImV4cCI6MTY5ODIzMzYyOH0.jW8IaxkrVqLlgxB789HMI8D3tjhtTVqBEQK13BBSOow
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MmU1ZDBmNDZiNTAxMzBkZjQxZGMzZCIsInVzZXJuYW1lIjoicGlua3BhbnRoZXIiLCJpYXQiOjE2OTc2MjkzMTYsImV4cCI6MTY5ODIzNDExNn0.5r-mOlF1rbiDtlnCK0NNBUni5AFZtLQndrEJOL5tolY
 
 {
-    "content": "Más allá de Villalba",
+    "content": "Cuando Batman perdió la capa...",
     "important": 1
 }
 

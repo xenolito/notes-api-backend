@@ -1,0 +1,9 @@
+POST http://localhost:4001/api/mail
+# PUT https://evening-castle-33015-33fd40ba3c3e.herokuapp.com/api/notes/6529202071cef67cdde33338
+Content-Type: application/json
+
+{
+  "to": "orey@pictau.com",
+  "subject": "Probando API envío de mails",
+  "content": "esto es un mail de <strong>Prueba</strong>"
+}
