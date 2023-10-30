@@ -1,2 +1,0 @@
-DELETE  http://localhost:4001/api/notes/652c15a8a144e51fab445090
-# DELETE https://evening-castle-33015-33fd40ba3c3e.herokuapp.com/api/notes/652acce3f282464ed8e19290
