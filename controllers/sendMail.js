@@ -15,6 +15,10 @@ mailRouter.post('/', async (request, response, next) => {
     return response.status(400).json({ error: 'missing some required fields' })
   }
 
+  if (!process.env.MAIL_USR || !process.env.MAIL_PASS) {
+    return response.status(500).json({ error: 'Missing ENV params for mail account credentials' })
+  }
+
   const transporter = nodemailer.createTransport({
     host: 'smtp.ionos.es',
     port: 465,
