@@ -31,7 +31,7 @@ mailRouter.post('/', async (request, response, next) => {
 
   async function main () {
     const info = await transporter.sendMail({
-      from: '"Hola que ase 🍹" <orey@pictau.com>',
+      from: '"Hola que ase 🍹" <hello@pictau.com>',
       to,
       subject,
       html: content
