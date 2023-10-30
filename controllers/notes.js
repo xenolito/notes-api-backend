@@ -2,8 +2,9 @@ const notesRouter = require('express').Router()
 const userExtractor = require('../middleware/userExtractor')
 const Note = require('../models/Note')
 const User = require('../models/User')
+const cors = require('cors')
 
-notesRouter.get('/', async (request, response) => {
+notesRouter.get('/', cors(), async (request, response) => {
   const notes = await Note.find({}).populate('user', {
     username: 1,
     name: 1,
@@ -14,7 +15,7 @@ notesRouter.get('/', async (request, response) => {
   response.json(notes)
 })
 
-notesRouter.get('/:id', async (request, response, next) => {
+notesRouter.get('/:id', cors(), async (request, response, next) => {
   const { id } = request.params
   console.log('Note id:', { id })
 

@@ -25,6 +25,7 @@ const verifyJson = {
 }
 
 app.use(cors())
+
 app.use(express.json(verifyJson))
 app.use(express.static('public'))
 app.use(logger)

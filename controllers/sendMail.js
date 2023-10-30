@@ -1,5 +1,18 @@
 const mailRouter = require('express').Router()
 const nodemailer = require('nodemailer')
+// const corsMiddleware = require('../cors')
+
+// console.log('allowed origins', corsOriginAllowed)
+
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     console.log('Origin', origin)
+//     if (corsOriginAllowed.indexOf(origin) === -1) {
+//       const msg = 'The CORS policy for this site does not allow access from the specified Origin.'
+//       return callback(new Error(msg), false)
+//     }
+//   }
+// }
 
 mailRouter.get('/', async (request, response, next) => {
   response.json({
@@ -18,6 +31,8 @@ mailRouter.post('/', async (request, response, next) => {
   if (!process.env.MAIL_USR || !process.env.MAIL_PASS) {
     return response.status(500).json({ error: 'Missing ENV params for mail account credentials' })
   }
+
+  console.log('header', request.headers)
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.ionos.es',
