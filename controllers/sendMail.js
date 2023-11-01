@@ -2,28 +2,6 @@ const mailRouter = require('express').Router()
 const nodemailer = require('nodemailer')
 const corsMiddleware = require('../cors')
 
-// console.log('allowed origins', corsOriginAllowed)
-
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     console.log('Origin', origin)
-//     if (corsOriginAllowed.indexOf(origin) === -1) {
-//       const msg = 'The CORS policy for this site does not allow access from the specified Origin.'
-//       return callback(new Error(msg), false)
-//     }
-//   }
-// }
-
-const corsOriginAllowed = process.env.CORS_ALLOWED.split(', ')
-
-const validCORS = function (origin) {
-  if (corsOriginAllowed.indexOf(origin) !== -1) {
-    return true
-  } else {
-    return false
-  }
-}
-
 mailRouter.use(corsMiddleware)
 
 mailRouter.get('/', async (request, response, next) => {
@@ -36,13 +14,19 @@ mailRouter.post('/', async (request, response, next) => {
   const { body, headers } = request
   const { to, subject, content } = body
 
-  console.log('headers', request.headers)
+  // console.log('headers', request.headers)
 
   if (!to || !subject || !content) {
     return response.status(400).json({ error: 'missing some required fields' })
   }
 
-  if (!validCORS(headers.origin)) {
+  // if (!validCORS(headers.origin)) {
+  //   return response.status(403).json({ error: 'forbidden by CORS' })
+  // }
+
+  // console.log('validCORS: ', corsMiddleware.validCORS(headers.origin), headers.origin)
+
+  if (!corsMiddleware.validCORS(headers.origin)) {
     return response.status(403).json({ error: 'forbidden by CORS' })
   }
 

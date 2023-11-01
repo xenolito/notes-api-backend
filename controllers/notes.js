@@ -13,7 +13,7 @@ notesRouter.get('/', async (request, response) => {
     _id: 0
   })
 
-  console.log(notes)
+  // console.log(notes)
   response.json(notes)
 })
 

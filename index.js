@@ -11,6 +11,7 @@ const usersRouter = require('./controllers/users')
 const notesRouter = require('./controllers/notes')
 const loginRouter = require('./controllers/login')
 const mailRouter = require('./controllers/sendMail')
+
 // const connectionStr = require('./mongo')
 
 const app = express()
@@ -30,11 +31,6 @@ app.use(express.json(verifyJson))
 app.use(express.static('public'))
 app.use(logger)
 
-// app.get('/', (request, response) => {
-//   // response.send('<h1>Bienvenido a la API de PICTAU©</h1><p>Browse all notes <a href="/api/notes">here</a><p>')
-//   response.sendFile('index2.html')
-// })
-
 app.use('/api/notes', notesRouter)
 
 app.use('/api/users', usersRouter)
@@ -42,6 +38,11 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
 app.use('/api/mail', mailRouter)
+
+if (process.env.NODE_ENV === 'test') {
+  const testRouter = require('./controllers/testing')
+  app.use('/api/testing', testRouter)
+}
 
 app.use(notFound)
 

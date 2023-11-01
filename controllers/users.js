@@ -1,9 +1,20 @@
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/User')
+const cors = require('cors')
+// const corsMiddleware = require('../cors')
+
+// usersRouter.use(corsMiddleware)
+usersRouter.use(cors())
 
 usersRouter.get('/', async (request, response) => {
-//   const users = await User.find({})
+  // const { headers } = request
+
+  //   const users = await User.find({})
+  // if (!corsMiddleware.validCORS(headers.origin)) {
+  //   return response.status(403).json({ error: 'forbidden by CORS' })
+  // }
+
   const users = await User.find({}).populate('notes', {
     content: 1, // sí quiero que populate el content de la nota...
     date: 1 // sí quiero que populate el date de la nota...

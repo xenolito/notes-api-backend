@@ -18,4 +18,13 @@ const corsOptions = {
   optionsSuccessStatus: 200
 }
 
-module.exports = corsMiddleware(corsOptions)
+const validCORS = function (origin) {
+  if (corsOriginAllowed.indexOf(origin) !== -1) {
+    return true
+  } else {
+    return false
+  }
+}
+
+const whiteListCORS = module.exports = corsMiddleware(corsOptions)
+whiteListCORS.validCORS = validCORS
